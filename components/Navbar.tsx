@@ -1,27 +1,58 @@
+"use client"
+
 import Link from "next/link"
+import { useAuth } from "@/context/AuthContext"
+import { useCart } from "@/context/CartContext"
 
 export default function Navbar() {
-  return (
-    <nav className="flex justify-between items-center p-6 border-b">
+  const { user, logout } = useAuth()
+  const { cart } = useCart()
 
-      <Link href="/" className="text-xl font-bold">
-        HealthWell
+  const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0)
+
+  return (
+    <nav className="bg-white shadow-md p-4 flex justify-between items-center text-green-600">
+      <Link href="/" className="text-2xl font-bold">
+        Health & Wellness
       </Link>
 
-      <div className="flex gap-6">
+      <div className="flex items-center gap-6 text-gray-700">
+        {user && (
+          <>
+            <span className="font-medium">Hello, {user.name}</span>
+            <Link href="/products" className="hover:text-green-600 transition-colors">
+              Products
+            </Link>
+            <Link href="/quiz" className="hover:text-green-600 transition-colors">
+              Quiz
+            </Link>
+            <Link href="/subscriptions" className="hover:text-green-600 transition-colors">
+              Subscriptions
+            </Link>
+            <Link href="/blog" className="hover:text-green-600 transition-colors">
+              Blog
+            </Link>
+            <Link href="/checkout" className="hover:text-green-600 transition-colors">
+              Cart ({cartCount})
+            </Link>
+            <button
+              onClick={logout}
+              className="bg-red-600 text-white px-3 py-1 rounded-md hover:bg-red-700 transition-colors"
+            >
+              Logout
+            </button>
+          </>
+        )}
 
-        <Link href="/products">Products</Link>
-
-        <Link href="/pricing">Pricing</Link>
-
-        <Link href="/blog">Blog</Link>
-
-        <Link href="/about">About</Link>
-
-        <Link href="/contact">Contact</Link>
-
+        {!user && (
+          <Link
+            href="/login"
+            className="bg-green-600 text-white px-3 py-1 rounded-md hover:bg-green-700 transition-colors"
+          >
+            Login
+          </Link>
+        )}
       </div>
-
     </nav>
   )
 }
