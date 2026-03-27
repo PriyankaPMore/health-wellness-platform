@@ -1,18 +1,20 @@
 "use client"
 
 import { createContext, useContext, useState, ReactNode } from "react"
-import { Product } from "@/lib/products"
+import { Product } from "@/types/product"
 
+// Cart item type
 export type CartItem = {
   product: Product
   quantity: number
   subscription: string
 }
 
-export type CartContextType = {
+// Context type
+type CartContextType = {
   cart: CartItem[]
-  addToCart: (product: Product, subscription: string, quantity: number) => void
-  removeFromCart: (productId: string) => void
+  addToCart: (product: Product, quantity: number, subscription: string) => void
+  removeFromCart: (productId: string, subscription: string) => void
   clearCart: () => void
 }
 
@@ -21,17 +23,35 @@ const CartContext = createContext<CartContextType | undefined>(undefined)
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cart, setCart] = useState<CartItem[]>([])
 
-  const addToCart = (product: Product, subscription: string, quantity: number) => {
-    setCart((prev) => [...prev, { product, subscription, quantity }])
+  // Add or update cart item
+  const addToCart = (product: Product, quantity: number, subscription: string) => {
+    setCart((prev) => {
+      const existing = prev.find(
+        (item) => item.product.id === product.id && item.subscription === subscription
+      )
+
+      if (existing) {
+        // Increment quantity
+        return prev.map((item) =>
+          item.product.id === product.id && item.subscription === subscription
+            ? { ...item, quantity: item.quantity + quantity }
+            : item
+        )
+      } else {
+        return [...prev, { product, quantity, subscription }]
+      }
+    })
   }
 
-  const removeFromCart = (productId: string) => {
-    setCart((prev) => prev.filter((item) => item.product.id !== productId))
+  // Remove a specific item
+  const removeFromCart = (productId: string, subscription: string) => {
+    setCart((prev) =>
+      prev.filter((item) => !(item.product.id === productId && item.subscription === subscription))
+    )
   }
 
-  const clearCart = () => {
-    setCart([]) // clear the entire cart
-  }
+  // Clear all items
+  const clearCart = () => setCart([])
 
   return (
     <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart }}>
@@ -40,7 +60,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   )
 }
 
-// Hook to use cart in components
+// Hook for consuming cart context
 export const useCart = () => {
   const context = useContext(CartContext)
   if (!context) throw new Error("useCart must be used within CartProvider")

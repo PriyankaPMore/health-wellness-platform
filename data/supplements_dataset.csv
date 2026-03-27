@@ -7,7 +7,7 @@ id,name,description,price,category,image,brand,stock
 
 6,Creatine Monohydrate Powder,Boost strength and power output during workouts,29.99,Performance,https://source.unsplash.com/600x400/?creatine&sig=6,ProFuel,100
 7,Pre Workout Energy Blend,Boosts energy focus and workout endurance,32.99,Performance,https://source.unsplash.com/600x400/?pre-workout&sig=7,AlphaEnergy,85
-8,BCAA Recovery Drink,Essential amino acids for muscle recovery,24.99,Performance,https://source.unsplash.com/600x400/?bcaa&sig=8,RecoverX,110
+8,BCAA Recovery Drink,Essential amino acids for muscle recovery,24.99,Performance,public\images\BCAA.jpg
 9,L-Glutamine Powder,Supports muscle recovery and immune function,19.99,Performance,https://source.unsplash.com/600x400/?amino-acid-supplement&sig=9,ProFuel,95
 10,Beta Alanine Powder,Improves endurance during high intensity exercise,21.99,Performance,https://source.unsplash.com/600x400/?fitness-supplement-powder&sig=10,AlphaEnergy,70
 

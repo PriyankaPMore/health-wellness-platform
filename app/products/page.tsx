@@ -1,24 +1,18 @@
-"use client"
-
-import { products } from "@/lib/products"
+import { supabase } from "@/lib/supabase"
 import ProductCard from "@/components/ProductCard"
-import { useCart } from "@/context/CartContext"
 
-export default function ProductsPage() {
-  const { addToCart } = useCart()
+export default async function Home() {
+  const { data: products } = await supabase
+    .from("products")
+    .select("*")
 
   return (
-    <div className="container mx-auto py-20 px-6">
-      <h1 className="text-4xl font-bold mb-12 text-center">Products</h1>
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-6">Products</h1>
 
-      {/* Product Grid */}
-      <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
-        {products.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            onAddToCart={addToCart} // function from CartContext
-          />
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {products?.map((product) => (
+          <ProductCard key={product.id} product={product} />
         ))}
       </div>
     </div>
